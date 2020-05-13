@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const UserContext = React.createContext();
 
@@ -15,6 +15,18 @@ function UserProvider({ children }) {
     show: false,
     msg: '',
     type: 'success',
+  });
+  const [height, setHeight] = useState(0);
+
+  // Lifecycle
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      setHeight(window.pageYOffset);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', () => {});
+    };
   });
 
   // functionality
@@ -38,7 +50,15 @@ function UserProvider({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ user, userLogin, userLogout, alert, showAlert, hideAlert }}
+      value={{
+        user,
+        userLogin,
+        userLogout,
+        alert,
+        showAlert,
+        hideAlert,
+        height,
+      }}
     >
       {children}
     </UserContext.Provider>
